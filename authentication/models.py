@@ -16,11 +16,11 @@ class User(AbstractUser):
     follows = models.ManyToManyField('self', limit_choices_to={'role': CREATOR}, symmetrical=False)
 
 
-    def save(self, *ergs, **kwargs):
+    def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.role == self.CREATOR:
             group = Group.objects.get(name='creators')
             group.user_set.add(self)
         elif self.role == self.SUBSCRIBER:
-            group = Group.objects.get(name='subscriber')
+            group = Group.objects.get(name='subscribers')
             group.user_set.add(self)
